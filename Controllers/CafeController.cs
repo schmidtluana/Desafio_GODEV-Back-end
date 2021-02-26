@@ -9,16 +9,20 @@ using treinamento.Models;
 
 namespace treinamento.Controllers
 {
-    [EnableCors(origins: "http://localhost:8080", headers: "*", methods: "*")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class CafeController : ApiController
     {
-        programa_GODEVEntities bd = new programa_GODEVEntities();
+        
         // GET: api/Cafe
         public IEnumerable<dynamic> Get()
         {
-            var cafes = from ca in bd.cafe
-                        select new { ca.id, ca.nome, ca.lotacao };
-            return cafes;
+            using (programa_GODEVEntities bd = new programa_GODEVEntities())
+            {
+                var cafes = from ca in bd.cafe
+                            select new { ca.id, ca.nome, ca.lotacao };
+                return cafes;
+            }
+                
         }
 
         // GET: api/Cafe/5
@@ -30,9 +34,13 @@ namespace treinamento.Controllers
         // POST: api/Cafe
         public string Post([FromBody] cafe caf)
         {
-            bd.cafe.Add(caf);
-            bd.SaveChanges();
-            return "Salvo com sucesso";
+            using (programa_GODEVEntities bd = new programa_GODEVEntities())
+            {
+                bd.cafe.Add(caf);
+                bd.SaveChanges();
+                return "Salvo com sucesso";
+            }
+               
         }
 
         // PUT: api/Cafe/5

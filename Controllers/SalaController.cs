@@ -9,7 +9,7 @@ using treinamento.Models;
 
 namespace treinamento.Controllers
 {
-    [EnableCors(origins: "http://localhost:8080", headers:"*", methods:"*")]
+    [EnableCors(origins: "*", headers:"*", methods:"*")]
     public class SalaController : ApiController
     {
         programa_GODEVEntities bd = new programa_GODEVEntities();
@@ -17,9 +17,13 @@ namespace treinamento.Controllers
         // GET: api/Sala
         public IEnumerable<dynamic> Get()
         {
-            var salas = from sa in bd.sala
-                        select new { sa.id, sa.nome, sa.lotacao };
-            return salas;
+            using (programa_GODEVEntities bd = new programa_GODEVEntities())
+            {
+                var salas = from sa in bd.sala
+                            select new { sa.id, sa.nome, sa.lotacao };
+                return salas;
+            }
+                
         }
 
         // GET: api/Sala/5
@@ -31,9 +35,13 @@ namespace treinamento.Controllers
         // POST: api/Sala
         public string Post([FromBody]sala sal)
         {
-            bd.sala.Add(sal);
-            bd.SaveChanges();
-            return "Salvo com sucesso";
+            using (programa_GODEVEntities bd = new programa_GODEVEntities())
+            {
+                bd.sala.Add(sal);
+                bd.SaveChanges();
+                return "Salvo com sucesso";
+            }
+               
         }
 
         // PUT: api/Sala/5
